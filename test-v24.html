@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14213d">
+<title>東京シャトールージュ 休憩メモ Ver.2.4</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf1f7;color:#19243b;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
+header{background:#14213d;color:white;text-align:center;padding:25px 12px;border-radius:0 0 24px 24px}header h1{font-size:25px;margin:8px 0}header small{color:#cad5e7}
+main{max-width:650px;margin:auto;padding:14px}section{background:white;border-radius:18px;padding:17px;margin-bottom:14px}h2{font-size:19px;margin:5px 0 15px}
+label{display:block;font-size:14px;font-weight:bold;margin:12px 0 6px}input,select{width:100%;font-size:17px;padding:12px;border:1px solid #bbc7d8;border-radius:10px;background:white;color:#19243b}
+button{display:block;width:100%;border:0;border-radius:12px;padding:17px 10px;font-size:17px;font-weight:bold;margin:7px 0;cursor:pointer}button:disabled{opacity:.4}
+.blue{background:#2544a2;color:white}.gray{background:#dfe6f0;color:#19243b}.green{background:#087b4f;color:white}.red{background:#fce8e8;color:#a22}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat{background:#edf2f9;padding:13px;border-radius:12px}.stat b{display:block;font-size:24px;margin-top:5px}
+.small{font-size:12px;color:#66778f;line-height:1.7}.item{padding:12px 0;border-bottom:1px solid #dce3ee}.item strong{display:block;margin-bottom:6px}.item button{font-size:13px;padding:10px}
+
+/* 操作ガイド（印刷対象外） */
+.guide-intro{margin:0 0 12px;color:#526682;font-size:14px;line-height:1.6}
+.guide-trigger{background:#eff4ff;border:2px solid #2b4cad;color:#17377f;margin:0;display:flex;align-items:center;justify-content:center;gap:8px}
+.guide-panel{margin-top:12px;padding:14px;background:#f6f8fd;border:1px solid #cbd6eb;border-radius:14px}
+.guide-panel h3{font-size:17px;margin:15px 0 8px;color:#163374}
+.guide-panel h3:first-child{margin-top:0}
+.guide-panel p,.guide-panel li{font-size:15px;line-height:1.75}
+.guide-panel ol{padding-left:24px;margin:6px 0 12px}
+.guide-note{background:#fff8e7;border-left:4px solid #d4a544;padding:10px;border-radius:8px;font-size:14px;line-height:1.7;margin-top:12px}
+.guide-hide{font-size:14px;background:#dfe6f0;margin-top:14px;padding:12px}
+#activeBox{background:#fff6d8;border:2px solid #d6a947;text-align:center}[hidden]{display:none!important}#printArea{display:none}
+@media print{
+ @page{size:A4 landscape;margin:5mm}
+ body{background:white;color:black}header,main{display:none!important}#printArea{display:block!important;font-family:Arial,"Hiragino Kaku Gothic ProN",sans-serif}
+ #printArea h2{text-align:center;font-size:11pt;margin:0 0 1.5mm}#printArea p{font-size:8.5pt;margin:0 0 2mm}
+ #printArea table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8.2pt;line-height:1.1}
+ #printArea th,#printArea td{border:0.6pt solid #333;padding:0.25mm 0.8mm;vertical-align:middle}
+ #printArea th{background:#eee;font-weight:bold;height:5mm}
+ #printArea tbody tr{height:4.5mm;break-inside:avoid;page-break-inside:avoid}
+ #printArea td.center{text-align:center}#printArea td.total{text-align:center;font-weight:bold}
+ #printArea .smoke-line{white-space:nowrap;font-size:8.1pt;line-height:1.06}
+ #printArea .compact{white-space:nowrap;font-size:8.0pt}
+}
+</style>
+</head>
+<body>
+<header><small>TOKYO CHATEAU ROUGE</small><h1>休憩時間メモ Ver.2.4</h1><small>日付別保存・時刻修正・見やすい月間印刷</small></header>
+<main>
+
+<section id="howto">
+<button type="button" class="guide-trigger" id="guideToggle" aria-controls="guidePanel" aria-expanded="false" onclick="toggleGuide()">📖 使い方を見る　▼</button>
+<div id="guidePanel" class="guide-panel" hidden>
+<h3>① 最初に設定すること</h3>
+<ol><li>「スタッフ名」を入力します。</li><li>「勤務日」が出勤した日になっているか確認します。</li><li>「片番」または「通し」を選びます。</li></ol>
+<p><strong>勤務形態を間違えても大丈夫！</strong> 「勤務形態」を選び直すだけで変更できます。入力済みの休憩記録・修正済み時刻はそのまま残ります。過去の日付も変更できます。休憩中だけは変更できません。</p>
+<p>夜中の0時を過ぎて翌1:30まで働く場合も、<strong>出勤した日付</strong>で記録してください。</p>
+<h3>② 休憩に出るとき・戻るとき</h3>
+<ol><li>「🚬 タバコ休憩に行く」「🍱 食事休憩に行く」など、該当するボタンを押します。</li><li>休憩が終わって戻ったら、緑色の「✅ 戻りました！」を押します。</li><li>下の「この日の休憩記録」に時刻が追加されます。</li></ol>
+<p>通し勤務では「🛋️ 60分休憩」も選べます。<strong>休憩中はブラウザを閉じても、戻ったら同じアプリを開いて帰着を押してください。</strong></p>
+<h3>③ 間違えた時刻を修正する</h3>
+<ol><li>「この日の休憩記録」の「✏️ 時刻を修正」を押します。</li><li>開始日時と終了日時を入力して確認します。</li><li>修正後の時間と休憩合計を確認します。</li></ol>
+<p>入力例：<strong>2026-11-01T16:30</strong>（年-月-日T時:分）。翌日なら翌日の日付で入力します。修正前の時刻も内部履歴に残ります。</p>
+<h3>④ 過去の記録を見る</h3>
+<p>「📅 過去の勤務日」から日付を選びます。記録を見たり修正したりできます。今日に戻るときは上の「勤務日」を今日の日付に変更してください。</p>
+<h3>⑤ 月末に1か月分を印刷する</h3>
+<ol><li>「🖨️ 月間休憩記録を印刷」で対象月を選びます。</li><li>青い「A4横向きで1か月分を印刷」を押します。</li><li>Safariの印刷設定で<strong>A4・横向き・90%</strong>にします。</li><li>プレビューで<strong>1/1ページ</strong>と月末の日付まで表示されていることを確認してから印刷します。</li></ol>
+<p>プリンターがない場合は、プレビューからPDFとして保存して後から印刷する方法もあります。</p>
+<h3>⑥ バックアップと削除</h3>
+<p>「💾 記録をバックアップ保存」でJSONファイルを定期的に保存してください。「バックアップを復元」は現在の記録を上書きするので、必要な場合だけ使います。「選択日の記録を削除」はその日の記録がまとめて消えるため注意してください。</p>
+<div class="guide-note">⚠️ 記録はこの端末・このブラウザ内に保存されます。ほかのスタッフのスマホや会社のPCへ自動送信されません。Safariとホーム画面アプリで記録が別々に見える場合もあるので、普段使う開き方を統一し、定期的にバックアップしてください。</div>
+<button type="button" class="guide-hide" onclick="toggleGuide(false)">📖 説明を閉じる　▲</button>
+</div>
+</section>
+<section>
+<label>スタッフ名</label><input id="staff" placeholder="スタッフ名を入力">
+<label>勤務日（出勤した日）</label><input id="day" type="date">
+<label>勤務形態</label><select id="shift"><option value="short">片番 16:30〜翌1:30</option><option value="long">通し 10:30〜翌1:30</option></select>
+<p class="small">翌1:30までの休憩も、出勤した勤務日に記録します。<strong>勤務形態は後から選び直せます。記録は消えません。</strong>（休憩中は変更できません）</p><p id="shiftNotice" class="small" role="status" aria-live="polite"></p>
+</section>
+<section><div class="stats"><div class="stat">🚬 タバコ休憩<b id="sCount">0 / 8</b><small>1回5分</small></div><div class="stat">🍱 食事休憩<b id="mCount">0 / 1</b><small id="foodTime">1回20分</small></div></div>
+<div class="stat" id="restStats" style="margin-top:9px" hidden>🛋️ 60分休憩<b id="rCount">0 / 1</b></div>
+<div id="buttons"><button class="blue" id="sButton" onclick="startBreak('smoke')">🚬 タバコ休憩に行く</button><button class="gray" id="mButton" onclick="startBreak('meal')">🍱 食事休憩に行く</button><button class="gray" id="rButton" onclick="startBreak('rest')" hidden>🛋️ 60分休憩に行く</button></div></section>
+<section id="activeBox" hidden><h2 id="activeName">休憩中</h2><p id="started"></p><button class="green" onclick="endBreak()">✅ 戻りました！</button></section>
+<section><h2>📝 この日の休憩記録</h2><div id="entries"></div><p id="sum"></p></section>
+<section><h2>📅 過去の勤務日</h2><div id="past"></div><p class="small">日付を選ぶと過去の記録を確認・修正できます。</p></section>
+<section><h2>🖨️ 月間休憩記録を印刷</h2><label>印刷する月</label><input id="month" type="month"><button class="blue" onclick="makePrint()">A4横向きで1か月分を印刷</button><p class="small">31日分をA4横向き1枚に収めるため、空欄の行の高さを調整しました。小休憩は6件ごとに最大2行、合計は太字です。印刷時はA4・横向き・90%で、1ページになっているか確認してください。</p></section>
+<section><h2>💾 バックアップ</h2><button class="gray" onclick="exportBackup()">記録をバックアップ保存</button><label>バックアップから復元</label><input type="file" id="restoreFile" accept=".json,application/json"><button class="gray" onclick="restoreBackup()">バックアップを復元</button><button class="red" onclick="deleteDay()">選択日の記録を削除</button><p class="small">Ver.2.4は初回起動時に同じブラウザのVer.2.3（なければVer.2.2、Ver.2.1、Ver.2.0）の記録をコピーします。以後は別々に保存し、旧版は変更しません。ブラウザのデータ削除などで記録が失われることがあるため定期的なバックアップをおすすめします。</p></section>
+</main><div id="printArea"></div>
+<script>
+"use strict";
+function toggleGuide(force){const panel=document.getElementById("guidePanel"),button=document.getElementById("guideToggle");const open=typeof force==="boolean"?force:panel.hidden;panel.hidden=!open;button.setAttribute("aria-expanded",String(open));button.textContent=open?"📖 使い方を見る　▲":"📖 使い方を見る　▼";if(!open)document.getElementById("howto").scrollIntoView({behavior:"smooth",block:"start"})}
+
+const KEY="chateau_break_v24",OLD_KEY="chateau_break_v23",OLDER_KEY="chateau_break_v22",OLDEST_KEY="chateau_break_v21",$=id=>document.getElementById(id),pad=n=>String(n).padStart(2,"0");
+function dateKey(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function dateTime(d){return dateKey(d)+"T"+pad(d.getHours())+":"+pad(d.getMinutes())}
+function fmt(v){const d=new Date(v);return pad(d.getMonth()+1)+"/"+pad(d.getDate())+" "+pad(d.getHours())+":"+pad(d.getMinutes())}
+function hhmm(v){const d=new Date(v);return pad(d.getHours())+":"+pad(d.getMinutes())}
+function mins(a,b){return Math.max(0,Math.round((new Date(b)-new Date(a))/60000))}
+const labels={smoke:"🚬 タバコ",meal:"🍱 食事",rest:"🛋️ 60分休憩"};
+let data;
+try{data=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!data||!data.days){try{data=JSON.parse(localStorage.getItem(OLD_KEY))}catch(e){} }
+if(!data||!data.days){try{data=JSON.parse(localStorage.getItem(OLDER_KEY))}catch(e){} }
+if(!data||!data.days){try{data=JSON.parse(localStorage.getItem(OLDEST_KEY))}catch(e){} }
+if(!data||!data.days){try{data=JSON.parse(localStorage.getItem("chateau_break_v2"))}catch(e){} }
+if(!data||!data.days||typeof data.days!=="object")data={staff:"",day:dateKey(new Date()),days:{}};
+function current(){if(!data.days[data.day])data.days[data.day]={shift:"short",entries:[],active:null};return data.days[data.day]}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){alert("保存に失敗しました。端末の空き容量などを確認してください。")}}
+function limits(shift){return shift==="long"?{smoke:12,meal:2,rest:1,food:30}:{smoke:8,meal:1,rest:0,food:20}}
+function count(r,type){return r.entries.filter(x=>x.type===type).length+(r.active&&r.active.type===type?1:0)}
+function render(){const r=current(),l=limits(r.shift);$("staff").value=data.staff;$("day").value=data.day;$("shift").value=r.shift;$("shift").disabled=!!r.active;
+$("sCount").textContent=count(r,"smoke")+" / "+l.smoke;$("mCount").textContent=count(r,"meal")+" / "+l.meal;$("foodTime").textContent="1回"+l.food+"分";$("rCount").textContent=count(r,"rest")+" / 1";
+$("shiftNotice").textContent=(count(r,"smoke")>l.smoke||count(r,"meal")>l.meal||count(r,"rest")>l.rest)?"⚠️ 変更前の休憩記録は保持しています。新しい勤務形態の回数上限を超えている項目は、追加の休憩ボタンが使えません。":"";
+$("restStats").hidden=r.shift!=="long";$("rButton").hidden=r.shift!=="long";$("buttons").hidden=!!r.active;$("activeBox").hidden=!r.active;
+$("sButton").disabled=count(r,"smoke")>=l.smoke;$("mButton").disabled=count(r,"meal")>=l.meal;$("rButton").disabled=count(r,"rest")>=l.rest;
+if(r.active){$("activeName").textContent=labels[r.active.type]+"休憩中";$("started").textContent="開始 "+fmt(r.active.start)}
+const area=$("entries");area.innerHTML="";let total=0;
+r.entries.forEach((e,i)=>{const n=mins(e.start,e.end);total+=n;const row=document.createElement("div");row.className="item";const title=document.createElement("strong");title.textContent=labels[e.type]+" "+n+"分";const times=document.createElement("div");times.textContent=fmt(e.start)+" → "+fmt(e.end);const btn=document.createElement("button");btn.className="gray";btn.textContent="✏️ 時刻を修正";btn.onclick=()=>editEntry(i);row.append(title,times,btn);area.append(row)});
+if(!r.entries.length)area.textContent="まだ記録がありません";$("sum").textContent="休憩合計："+total+"分";
+const past=$("past");past.innerHTML="";Object.keys(data.days).sort().reverse().forEach(d=>{const obj=data.days[d];if(!obj.entries.length&&!obj.active)return;const b=document.createElement("button");b.className="gray";b.textContent=d+"　"+(obj.shift==="long"?"通し":"片番")+"　"+obj.entries.length+"件";b.onclick=()=>{if(current().active){alert("休憩中は日付を変更できません");return}data.day=d;save();render();window.scrollTo(0,0)};past.append(b)})}
+$("staff").addEventListener("change",e=>{data.staff=e.target.value;save()});
+$("day").addEventListener("change",e=>{if(current().active){alert("休憩中は日付を変更できません");render();return}if(e.target.value){data.day=e.target.value;save();render()}});
+$("shift").addEventListener("change",e=>{const r=current();if(r.active){alert("休憩中は勤務形態を変更できません。帰着後に変更してください。");render();return}const next=e.target.value;if(next!=="short"&&next!=="long"){render();return}if(r.shift===next)return;r.shift=next;save();render();$("shiftNotice").textContent="✅ 勤務形態を変更しました。入力済みの記録はそのまま残っています。"+($("shiftNotice").textContent||"")});
+$("month").value=data.day.slice(0,7);
+function startBreak(type){data.staff=$("staff").value.trim();if(!data.staff){alert("スタッフ名を入力してください");return}const r=current(),l=limits(r.shift);if(r.active||count(r,type)>=l[type])return;r.active={type,start:new Date().toISOString()};save();render()}
+function endBreak(){const r=current();if(!r.active)return;r.entries.push({type:r.active.type,start:r.active.start,end:new Date().toISOString(),edits:[]});r.active=null;save();render()}
+function editEntry(i){const e=current().entries[i];if(!e)return;const s=prompt("開始日時 YYYY-MM-DDTHH:MM",dateTime(new Date(e.start)));if(s===null)return;const t=prompt("終了日時 YYYY-MM-DDTHH:MM",dateTime(new Date(e.end)));if(t===null)return;const a=new Date(s),b=new Date(t);if(!Number.isFinite(+a)||!Number.isFinite(+b)||b<a){alert("日時を確認してください");return}if(!confirm("この時刻に修正しますか？"))return;e.edits=e.edits||[];e.edits.push({oldStart:e.start,oldEnd:e.end,editedAt:new Date().toISOString()});e.start=a.toISOString();e.end=b.toISOString();save();render()}
+function deleteDay(){if(current().active){alert("休憩中は削除できません");return}if(!confirm(data.day+"の記録を削除しますか？"))return;delete data.days[data.day];save();render()}
+function exportBackup(){const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="kyukei-v24-backup-"+dateKey(new Date())+".json";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+async function restoreBackup(){const f=$("restoreFile").files[0];if(!f){alert("ファイルを選択してください");return}try{const x=JSON.parse(await f.text());if(!x.days||typeof x.days!=="object")throw Error("invalid");if(!confirm("現在のVer.2.4記録を上書きしますか？"))return;data=x;save();render();alert("復元しました")}catch(e){alert("バックアップファイルを確認してください")}}
+function makePrint(){const m=$("month").value;if(!/^\d{4}-\d{2}$/.test(m)){alert("対象月を選択してください");return}const [y,mo]=m.split("-").map(Number),last=new Date(y,mo,0).getDate(),area=$("printArea");area.innerHTML="";
+const heading=document.createElement("h2");heading.textContent="東京シャトールージュ　月間休憩記録表";const info=document.createElement("p");info.textContent="スタッフ："+data.staff+"　対象月："+y+"年"+mo+"月";area.append(heading,info);
+const table=document.createElement("table");table.innerHTML="<colgroup><col style='width:4%'><col style='width:6%'><col style='width:45%'><col style='width:18%'><col style='width:18%'><col style='width:6%'><col style='width:3%'></colgroup><thead><tr><th>日</th><th>勤務</th><th>小休憩（開始時刻・分数）</th><th>食事休憩</th><th>その他・60分休憩</th><th>合計</th><th>本人</th></tr></thead>";
+const body=document.createElement("tbody");
+for(let d=1;d<=31;d++){const key=m+"-"+pad(d),r=data.days[key],tr=document.createElement("tr"),kinds={smoke:[],meal:[],rest:[]};let total=0;
+if(r&&d<=last)r.entries.forEach(e=>{const n=mins(e.start,e.end),s=hhmm(e.start),t=hhmm(e.end);total+=n;if(e.type==="smoke")kinds.smoke.push(s+(n===5?"⑤":"("+n+")"));if(e.type==="meal")kinds.meal.push(s+"〜"+t);if(e.type==="rest")kinds.rest.push(s+"〜"+t+"("+n+")")});
+const fields=d<=last?[d,r?(r.shift==="long"?"通し":"片番"):"",kinds.smoke,kinds.meal.join(" / "),kinds.rest.join(" / "),r?total+"分":"",""]:["","",[],"","","",""];
+fields.forEach((v,i)=>{const td=document.createElement("td");if(i===2){const first=v.slice(0,6),second=v.slice(6);const line1=document.createElement("div");line1.className="smoke-line";line1.textContent=first.join("　");const line2=document.createElement("div");line2.className="smoke-line";line2.textContent=second.join("　");if(first.length)td.append(line1);if(second.length)td.append(line2)}else{td.textContent=v;if(i===3||i===4)td.className="compact";if(i===0||i===1||i===6)td.className="center";if(i===5)td.className="total"}tr.append(td)});body.append(tr)}
+table.append(body);area.append(table);window.print()}
+save();render();
+</script>
+</body>
+</html>
