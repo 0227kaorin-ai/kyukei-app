@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>印刷テスト・全日通し・東京シャトールージュ</title>
+<style>
+*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",sans-serif;background:#eaf0f7;color:#1e293b;margin:0;padding:24px 14px}.panel{max-width:720px;margin:0 auto;background:#fff;padding:24px 18px;border-radius:18px;box-shadow:0 3px 18px #0001}h1{font-size:22px;margin:0 0 12px}p{line-height:1.7}button{background:#294aa5;color:white;border:0;border-radius:13px;font-size:19px;font-weight:bold;width:100%;padding:18px;cursor:pointer}small{color:#64748b}#printArea{display:none}
+@media print{
+ @page{size:A4 landscape;margin:5mm}
+ body{background:white;color:black;padding:0;margin:0}.panel{display:none!important}#printArea{display:block!important;font-family:Arial,"Hiragino Kaku Gothic ProN",sans-serif}
+ #printArea h2{text-align:center;font-size:11pt;margin:0 0 1.5mm}#printArea p{font-size:8.5pt;margin:0 0 2mm}
+ #printArea table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8.2pt;line-height:1.1}
+ #printArea th,#printArea td{border:0.6pt solid #333;padding:0.25mm 0.8mm;vertical-align:middle}
+ #printArea th{background:#eee;font-weight:bold;height:5mm}
+ #printArea tbody tr{height:4.5mm;break-inside:avoid;page-break-inside:avoid}
+ #printArea td.center{text-align:center}#printArea td.total{text-align:center;font-weight:bold}
+ #printArea .smoke-line{white-space:nowrap;font-size:8.1pt;line-height:1.06}
+ #printArea .compact{white-space:nowrap;font-size:8.0pt}
+}
+</style></head><body>
+<div class="panel"><h1>🖨️ 全日「通し」印刷テスト</h1><p><strong>2026年11月の30日分すべて</strong>に、通し勤務の最大休憩記録を入れたサンプルです。</p><p>毎日：小休憩5分×12回／食事30分×2回／その他60分×1回（合計180分）</p><p><strong>Ver.2.8と同じ印刷表の列幅・文字サイズ・行設定</strong>で、A4横向きに収まるか試せます。実際のアプリの勤務記録は一切変更しません。</p><button onclick="window.print()">A4横向きで全日通しを印刷テスト</button><p><small>iPhoneの印刷設定で A4・横向き・97% を試し、プレビューが1/1ページになるか見てください。2ページに分かれたら、実際のアプリでも修正が必要な可能性があります。</small></p></div>
+<div id="printArea"><h2>東京シャトールージュ　月間休憩記録表【印刷テスト】</h2><p>スタッフ：テスト用　対象月：2026年11月　（全日通し・ダミーデータ）</p><table><colgroup><col style="width:4%"><col style="width:6%"><col style="width:45%"><col style="width:18%"><col style="width:18%"><col style="width:6%"><col style="width:3%"></colgroup><thead><tr><th>日</th><th>勤務</th><th>小休憩（開始時刻・分数）</th><th>食事休憩</th><th>その他・60分休憩</th><th>合計</th><th>確認</th></tr></thead><tbody id="rows"></tbody></table></div>
+<script>
+const tbody=document.getElementById('rows');
+const pad=n=>String(n).padStart(2,'0');
+function clock(n){n=((n%1440)+1440)%1440;return pad(Math.floor(n/60))+':'+pad(n%60)}
+for(let d=1;d<=31;d++){
+ const tr=document.createElement('tr');const demo=d<=30;
+ const base=11*60+5+((d%3)*2); // 1日ごとに時刻を微妙に変更
+ const smoke=Array.from({length:12},(_,i)=>clock(base+i*66)+'⑤');
+ const meal=[clock(14*60+10+(d%2)*5)+'〜'+clock(14*60+40+(d%2)*5),clock(20*60+30)+'〜'+clock(21*60)];
+ const rest=clock(17*60+50)+'〜'+clock(18*60+50)+'(60)';
+ const vals=demo?[String(d),'通し',smoke,meal.join(' / '),rest,'180分','']:['','',[],'','','',''];
+ vals.forEach((v,i)=>{const td=document.createElement('td');if(i===2){for(let start=0;start<v.length;start+=6){const line=document.createElement('div');line.className='smoke-line';line.textContent=v.slice(start,start+6).join('　');td.append(line)}}else{td.textContent=v;if(i===3||i===4)td.className='compact';if(i===0||i===1||i===6)td.className='center';if(i===5)td.className='total'}tr.append(td)});tbody.append(tr)
+}
+</script></body></html>
